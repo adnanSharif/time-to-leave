@@ -46,6 +46,13 @@ function readPreferences() {
     return preferences ? preferences : {};
 }
 
+function copyValuesFromSavedPreferencesToDerivedPreferences(savedPreferences){
+    derivedPreferences = {};
+    Object.keys(defaultPreferences).forEach(function(key){
+        derivedPreferences[key] = savedPreferences[key] || defaultPreferences[key];
+    })
+}
+
 /*
  * Returns true if something is missing or invalid in preferences file
  */
@@ -58,7 +65,7 @@ function shouldSaveDerivedPreferencesFile() {
 
     // Validate keys
     var prefs = readPreferences();
-    derivedPreferences = Object.assign(defaultPreferences, prefs);
+    copyValuesFromSavedPreferencesToDerivedPreferences(prefs);
     var loadedPref = Object.keys(prefs).sort();
     var derivedPrefKeys = Object.keys(derivedPreferences).sort();
     if (JSON.stringify(loadedPref) != JSON.stringify(derivedPrefKeys)) {
